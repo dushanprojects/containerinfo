@@ -1,0 +1,62 @@
+name: "Build-Push-Deploy"
+
+on:
+  workflow_dispatch: {} # Ondemand Run
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+    # paths-ignore: ".github/**"
+
+env:
+
+  # General
+  DOCKER_REGISTRY   : dushansri
+  DOCKER_BUILDKIT   : 1
+  DOCKER_PLATFORM   : "linux/arm64"
+
+  # Pull Request ENV
+  # Set PR and SHA for repository_dispatch
+  PR: ${{ github.event.pull_request.number }}
+  SHA: ${{ github.event.pull_request.head.sha }}
+
+# ------------------
+jobs:
+  build-api:
+    name: Build Api
+    runs-on: ubuntu-latest
+    # Run the job if it is not a scheduled or draft PR
+    if: github.event_name != 'schedule' && github.event.pull_request.draft != true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      #Setup ARM64 dependancies
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      # Docker Hub Registry login
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # SET Image Tag
+      - name: Set Tag
+        run: echo TAG=$(git rev-parse --short $SHA) >> $GITHUB_ENV
+      - name: Display Tag
+        run: echo $TAG
+      # Building and pushing the Image to Docker Hub
+      - name: Build & Push Image
+        working-directory: api/
+        run: |
+          BASE_IMAGE=$DOCKER_REGISTRY/containerinfo
+          docker pull --platform $DOCKER_PLATFORM $BASE_IMAGE:latest || echo "Warning: $BASE_IMAGE:latest not found, continuing..."
+          
+          docker buildx build \
+                        --pull \
+                        --push \
+                        --platform $DOCKER_PLATFORM \
+                        -t $BASE_IMAGE:$TAG \
+                        -t $BASE_IMAGE:latest \
+                        -f Dockerfile \
+                        --cache-from $BASE_IMAGE:latest .
