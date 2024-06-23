@@ -75,15 +75,21 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      # SET Image Tag
+      - name: Set Tag
+        run: echo TAG=$(git rev-parse --short $SHA) >> $GITHUB_ENV
+      - name: Display Tag
+        run: echo $TAG
       - name: Pull Image
         run: |
           BASE_IMAGE=$DOCKER_REGISTRY/containerinfo
+          echo BASE_IMAGE=$BASE_IMAGE >> $GITHUB_ENV
           docker pull --platform $DOCKER_PLATFORM $BASE_IMAGE:latest
       # Vulnerability Scan
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: '$BASE_IMAGE:latest'
+          image-ref: '${{ env.BASE_IMAGE }}:${{ env.TAG }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
