@@ -1,5 +1,5 @@
 # Project Overview
-Repository for Query Container Resource Information The code resides within the api directory.
+Repository for Query Container Resource Information. The code resides within the api directory.
 
 
 ## Building and Scaning Docker Image:
