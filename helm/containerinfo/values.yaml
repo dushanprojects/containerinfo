@@ -1,0 +1,37 @@
+nameOverride: "containerinfo"
+
+deployment:
+  replicaCount: 1
+
+  image:
+    repository: dushansri/containerinfo
+    pullPolicy: Always
+    tag: "latest"
+
+  serviceAccount:
+    create: true
+    annotations:
+      #managedBy: "SRE"
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+  className: "nginx"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+
