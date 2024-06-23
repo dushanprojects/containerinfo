@@ -69,6 +69,8 @@ jobs:
     needs:
      - build-push-api
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       # Docker Hub Registry login
       - name: Login to Docker Hub
         uses: docker/login-action@v3
