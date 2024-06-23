@@ -84,7 +84,7 @@ jobs:
         run: |
           BASE_IMAGE=$DOCKER_REGISTRY/containerinfo
           echo BASE_IMAGE=$BASE_IMAGE >> $GITHUB_ENV
-          docker pull --platform $DOCKER_PLATFORM $BASE_IMAGE:latest
+          docker pull --platform $DOCKER_PLATFORM $BASE_IMAGE:$TAG
       # Vulnerability Scan
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
