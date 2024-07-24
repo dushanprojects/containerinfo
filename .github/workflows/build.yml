@@ -24,7 +24,7 @@ env:
 jobs:
   build-push-api:
     name: Build & Push Api
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     # Run the job if it is not a scheduled or draft PR
     if: github.event_name != 'schedule' && github.event.pull_request.draft != true
     steps:
