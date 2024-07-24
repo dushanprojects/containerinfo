@@ -30,11 +30,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      #Setup ARM64 dependancies
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      # #Setup ARM64 dependancies
+      # - name: Set up QEMU
+      #   uses: docker/setup-qemu-action@v1
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v1
       # Docker Hub Registry login
       - name: Login to Docker Hub
         uses: docker/login-action@v3
