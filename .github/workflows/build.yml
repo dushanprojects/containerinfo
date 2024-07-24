@@ -64,7 +64,7 @@ jobs:
                         --cache-from $BASE_IMAGE:latest .
       - name: List dirs
         run: |
-          ls -la /tmp/.buildx*
+          ls -la /tmp/
           ls -la /var/lib/docker/
 
   scan:
