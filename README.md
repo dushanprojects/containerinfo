@@ -9,6 +9,7 @@ A separate GitHub Actions workflow is responsible for building, pushing, and sca
 Follow these steps to manually install the containerinfo Helm chart:
 
 #### 1. Validate Templates with Debugging
+
 Validate the templates and output them for debugging purposes. This helps ensure everything is set up correctly before actual installation.
 ```
 helm template test helm/containerinfo --debug
