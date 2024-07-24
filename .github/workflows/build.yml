@@ -24,17 +24,17 @@ env:
 jobs:
   build-push-api:
     name: Build & Push Api
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     # Run the job if it is not a scheduled or draft PR
     if: github.event_name != 'schedule' && github.event.pull_request.draft != true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # #Setup ARM64 dependancies
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
+      #Setup ARM64 dependancies
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
       # Docker Hub Registry login
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -62,6 +62,10 @@ jobs:
                         -t $BASE_IMAGE:latest \
                         -f Dockerfile \
                         --cache-from $BASE_IMAGE:latest .
+      - name: List dirs
+        run: |
+          ls -la /tmp/.buildx*
+          ls -la /var/lib/docker/
 
   scan:
     name: Scan Image
