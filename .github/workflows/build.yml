@@ -11,7 +11,7 @@ on:
 env:
 
   # General
-  DOCKER_REGISTRY   : dushansri
+  DOCKER_REGISTRY   : ${{ secrets.DOCKER_REGISTRY }}
   DOCKER_BUILDKIT   : 1
   DOCKER_PLATFORM   : "linux/arm64"
 
